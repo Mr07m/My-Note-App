@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note App | by Mahi Rathod</title>
+    <link rel="shortcut icon" href="./img/fevicon.png" type="image/x-icon">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        *{
+            padding: 0;margin: 0;box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        html,body{
+            overflow-x: hidden;
+        }
+        body{
+            background: #020244;
+
+        }
+        .container{
+            margin-left: 4%;
+            margin-top: 3%;
+            background: #020244;
+            width: 100%;
+
+        }
+        h1{
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: 10px;
+            color: white;
+        }
+        button{
+            border: none;
+            background:#ffae00;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 30px;
+            cursor: pointer;
+            color: #020244;
+        }
+        .input-box{
+            position: relative;
+            max-width: 250px;
+            min-height: 80px;
+            background: #fff;
+            color: #333;
+            padding: 8px;
+            font-size: 13px;
+            margin: 20px 0;
+            outline: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .input-box img{
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            cursor: pointer;
+            width: 25px;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><img src="./img/note-icon.png" height="40px" alt=""> <span>Notes</span></h2>
+        <button id="btn"><img src="./img/pen-icon.png" height="20px" alt=""> <span>Create Notes</span></button>
+        <div class="note-container">
+        </div>
+    </div>
+
+
+
+<script>
+    const btn = document.querySelector("#btn");
+    const notesContainer = document.querySelector(".note-container");
+    let notes = document.querySelectorAll(".input-box");
+
+    function showNotes(){
+        notesContainer.innerHTML = localStorage.getItem("notes");
+    }
+
+    showNotes();
+
+    function storeData() {
+        localStorage.setItem("notes",notesContainer.innerHTML);
+    }
+
+    btn.addEventListener("click", () =>{
+        let inputBox = document.createElement("p");
+        let img = document.createElement("img");
+        inputBox.className = "input-box";
+        inputBox.setAttribute("contenteditable","true");
+        img.src ="./img/delete-icon.png";
+        notesContainer.appendChild(inputBox).appendChild(img);
+    })
+
+    notesContainer.addEventListener("click",(e)=>{
+        if(e.target.tagName === "IMG"){
+            e.target.parentElement.remove();
+            storeData();
+        }
+        else if(e.target.tagName === "P"){
+            notes = document.querySelectorAll(".input-box");
+            notes.forEach(nt => {
+                nt.onkeyup = function(){
+                    storeData();
+                }
+            })
+        }
+    });
+
+    document.addEventListener("keydown",(event) =>{
+        if(event.key === "Enter"){
+            document.execCommand("insertLineBreak");
+            event.preventDefault();
+        }
+    });
+
+</script>
+</body>
+</html>
